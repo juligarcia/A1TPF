@@ -33,7 +33,7 @@
 typedef enum{ARG_LEER = LEER, ARG_ESCRIBIR = ESCRIBIR, ARG_CARGAR = CARGAR, ARG_GUARDAR = GUARDAR, ARG_PCARGAR = PCARGAR, ARG_PGUARDAR = PGUARDAR, ARG_SUMAR = SUMAR, ARG_RESTAR = RESTAR, ARG_DIVIDIR = DIVIDIR,
 ARG_MULTIPLICAR = MULTIPLICAR, ARG_JMP = JMP, ARG_JMPNEG = JMPNEG, ARG_JMPZERO = JMPZERO, ARG_JNZ = JNZ, ARG_DJNZ = DJNZ, ARG_HALT = HALT}opcode;
 
-typedef int palabra_t;
+typedef  unsigned short int palabra_t;
 
 typedef struct simpletron_t {palabra_t *palabras; palabra_t acc; size_t pc; int mem;}simpletron_t;
 

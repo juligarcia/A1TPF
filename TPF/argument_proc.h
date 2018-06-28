@@ -26,6 +26,6 @@ typedef struct flags_t{bool help; bool fotxt; bool fobin; bool stdin;}flags_t;
 
 /*Prototipo de la funcion para procesamiento de argumentos*/
 
-status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, char ***fpos);
+status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, char *fpos);
 
 #endif

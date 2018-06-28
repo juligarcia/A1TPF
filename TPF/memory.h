@@ -6,6 +6,8 @@
 
 /*Se define la interfaz del TDA vector que se usará como memoria*/
 
+#define MAX_SIZE_WORD 65535
+
 typedef struct vector{
 	size_t size;
 	void **datos;

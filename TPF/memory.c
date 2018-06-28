@@ -46,7 +46,8 @@ bool vector_cargar(vector_t *v, void *dato, int i, void *(*copiar)(void *)){
 	if(!(v->datos))
 		return false;
 
-	(v->datos)[i] = (*copiar)(dato);
+	if(!((v->datos)[i] = (*copiar)(dato)))
+		return false;
 
 	return true;
 }
@@ -59,10 +60,13 @@ Una por si se pasan los datos por stdin o un txt, y otra para extraer de un bin*
 
 void *vector_copiar(void *buffer){
 
-	int *dato = NULL, j;
+	unsigned short int *dato = NULL, j;
 	char *aux;
 
-	j = strtol(buffer, &aux, 10);
+	j = (unsigned short int)strtol(buffer, &aux, 10);
+
+	if(j > MAX_SIZE_WORD)
+		return NULL;
 
 	if(aux == buffer)
 		return NULL;

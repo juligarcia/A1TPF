@@ -4,18 +4,16 @@
 /*A lo que se apunta con esta funcion, es a un procesamiento no posicional de argumentos, en donde el usuario puede ingresar los argumentos mediante linea de comandos
   en el orden deseado, como por ejemplo poner los nombres de archvios de entrada desordenados e intercalados con otros "flags".*/
 
-status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, char ***fpos){
+status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, char *fpos){
 
 	/*Los argumentos a esta funcion son los conocidos argc, argv, y los adicionales flags para marca el estado de los parametros, la estructura simpletron, principal para el funcionamiento del programa,
 	  que aqui nos sirve para estabelcer la cantidad de memoria a usar. En esta nueva implementacion del trabajo, en esta funcion, se intenta mejorar el procesamiento anterior, y dado que se puede contar 
-	  con una cantidad maayor de archivos de entrada, se usara el puntero a int "fpos" para guardar las posiciones respectivas de los nombres de archivos en argv para no recorrer de nuevo argv en el main*/
+	  con una cantidad mayor de archivos de entrada, se apuntara con el puntero char *fpos a la posicion de argv donde comienzan los archivos de entrada*/
 
-	int i, size = 0, count = 0, aux;
+	int i, count = 0, aux;
 	char *ptr;
 
-	/*Se inicializa fpos en un puntero NULL dado que en el primer caso de realloc funcionara como malloc, tambien se inicializan algunos flags*/
-
-	*fpos = NULL;
+	fpos = NULL;
 	flags->help = false;
 	simpletron->mem = DEFAULT_MEM_SIZE;
 
@@ -34,70 +32,55 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 				flags->help = true;
 			}
 
-			else{
+			else if(!strcmp(argv[i], ARG_F)){
 
-				if(!strcmp(argv[i], ARG_F)){
-
-					if(!strcmp(argv[i + 1], FMT_TXT)){
-						flags->fotxt = true;
-						flags->fobin = false;
-						count = 1;
-					}
-
-					else{
-					
-						if(!strcmp(argv[i + 1], FMT_BIN)){
-							flags->fotxt = false;
-							flags->fobin = true;
-							count = 1;
-						}
-
-						else{
-							/*Caso default*/
-							flags->fotxt = true;
-							flags->fobin = false;
-						}
-					}
+				if(!strcmp(argv[i + 1], FMT_TXT)){
+					flags->fotxt = true;
+					flags->fobin = false;
+					count = 1;
 				}
+
+				else if(!strcmp(argv[i + 1], FMT_BIN)){
+
+					flags->fotxt = false;
+					flags->fobin = true;
+					count = 1;
+					}
 
 				else{
+					/*Caso default*/
+					flags->fotxt = true;
+					flags->fobin = false;
+				}
+			}
 
-					if(!strcmp(argv[i], ARG_M)){
+			else if(!strcmp(argv[i], ARG_M)){
 
-						if(!(aux = strtol(argv[i + 1], &ptr, 10))){
+				if(!(aux = strtol(argv[i + 1], &ptr, 10))){
 
-							if(*ptr != '\0'){
-							}
-
-							else{
-								simpletron->mem = aux;
-								count = 1;
-							}
-						}
+					if(*ptr != '\0'){
 					}
 
 					else{
-
-						if(!strcmp(argv[i], ARG_STDIN))
-							flags->stdin = true;
-						
-						else{
-							/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el dato restante es un nombre de archivo de entrada
-							por lo que se opta por guardar su posicion dentor del vector de cadenas "argv" para su futuro uso*/
-							
-							size++;
-
-							/*Como se menciono mas arriba, se usara realloc para hacer el vector dinamico y no perder memoria al hacerlo mas grande de lo necesario*/
-							/*Se crea un array dinamico de *char*/
-
-							*fpos = (char **)realloc(*fpos, size*sizeof(char *));
-
-							/*Luego se guarda el nombre del archivo ingresado*/
-
-							(*fpos)[size - 1] = (char *)malloc(strlen(argv[i]));
-						}
+						simpletron->mem = aux;
+						count = 1;
 					}
 				}
+			}
+
+			else if(!strcmp(argv[i], ARG_STDIN))
+
+				flags->stdin = true;
+						
+			else{
+
+				/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el/los datos restantes son nombres de archivos de entrada
+				por lo que se opta por guardar su direccion en un char * */
+
+				fpos = argv[i];
+
+				i = argc;
+
 			}
 		}
 
