@@ -4,7 +4,7 @@
 /*A lo que se apunta con esta funcion, es a un procesamiento no posicional de argumentos, en donde el usuario puede ingresar los argumentos mediante linea de comandos
   en el orden deseado, como por ejemplo poner los nombres de archvios de entrada desordenados e intercalados con otros "flags".*/
 
-status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, int **fpos){
+status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, char ***fpos){
 
 	/*Los argumentos a esta funcion son los conocidos argc, argv, y los adicionales flags para marca el estado de los parametros, la estructura simpletron, principal para el funcionamiento del programa,
 	  que aqui nos sirve para estabelcer la cantidad de memoria a usar. En esta nueva implementacion del trabajo, en esta funcion, se intenta mejorar el procesamiento anterior, y dado que se puede contar 
@@ -32,7 +32,6 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 
 			if(!strcmp(argv[i], ARG_H)){
 				flags->help = true;
-				continue;
 			}
 
 			else{
@@ -43,7 +42,6 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 						flags->fotxt = true;
 						flags->fobin = false;
 						count = 1;
-						continue;
 					}
 
 					else{
@@ -52,7 +50,6 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 							flags->fotxt = false;
 							flags->fobin = true;
 							count = 1;
-							continue;
 						}
 
 						else{
@@ -70,7 +67,6 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 						if(!(aux = strtol(argv[i + 1], &ptr, 10))){
 
 							if(*ptr != '\0'){
-								continue;
 							}
 
 							else{
@@ -92,12 +88,13 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 							size++;
 
 							/*Como se menciono mas arriba, se usara realloc para hacer el vector dinamico y no perder memoria al hacerlo mas grande de lo necesario*/
+							/*Se crea un array dinamico de *char*/
 
-							*fpos = (int *)realloc(*fpos, size*sizeof(int));
+							*fpos = (char **)realloc(*fpos, size*sizeof(char *));
 
-							/*Luego se guarda el estado del iterador i, es decir, la posicion dentro de "argv" en un vector dinamico de enteros*/
+							/*Luego se guarda el nombre del archivo ingresado*/
 
-							(*fpos)[size - 1] = i;
+							(*fpos)[size - 1] = (char *)malloc(strlen(argv[i]));
 						}
 					}
 				}
@@ -106,7 +103,6 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 
 		else{
 			count = 0;
-			continue;
 		}
 	}
 

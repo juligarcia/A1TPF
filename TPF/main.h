@@ -9,7 +9,15 @@
 #include <string.h>
 
 #include "types.h"
-#include "argument_proc.h"
 #include "simpletron.h"
+#include "argument_proc.h"
+#include "memory.h"
+
+/*Seleccion del lenguaje, ES ESPAÑOL, US INGLES*/
+
+#define LANG__ES
+#include "lang.h"
+
+
 
 #endif
