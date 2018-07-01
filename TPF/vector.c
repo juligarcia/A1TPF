@@ -35,12 +35,18 @@ void vector_destruir(vector_t *v){
 }
 
 
-void vector_cargar(vector_t *v, void *dato, int *used){
+bool vector_cargar(vector_t *v, void *dato, int *used){
 
-	v->datos[*used] = (palabra_t *)malloc(sizeof(palabra_t));
+	if(!(v->datos[*used] = (palabra_t *)malloc(sizeof(palabra_t)))){
+		free(v->datos[*used]);
+		return false;
+	}
+
 	v->datos[*used] = dato;
 
 	*used += 1;
+
+	return true;
 }
 
 

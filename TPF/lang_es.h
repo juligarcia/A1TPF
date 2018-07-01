@@ -4,7 +4,7 @@
 #define MSJ_INGRESE_POS "Ingrese la palabra a guardar en la posicion de memoria"
 /*Mensajes en ESPAÑOL para el seguimiento del procedimiento*/
 #define MSJ_COMIENZO_PROC "*** INICIO EJECUCION DEL SIMPLETRON ***"
-#define MSJ_LEER "Se ha guardado la palabra"
+
 #define MSJ_POS "En la posicion de memoria"
 #define MSJ_STOUT "se encuentra el valor"
 #define MSJ_CARGA "Se cargo en el acumulador la palabra de la posicion de memoria"

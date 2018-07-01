@@ -6,7 +6,7 @@
 
 /*Se define la interfaz del TDA vector que se usará como memoria*/
 
-#define MAX_SIZE_WORD 65535
+#define MAX_SIZE_WORD 32768
 #define MIN_SIZE_WORD -32768
 
 #define SHIFT_1 9
@@ -18,12 +18,22 @@ typedef struct vector{
 	void **datos;
 } vector_t;
 
-void vector_cargar(vector_t *v, void *dato, int *used);
+/*Funciones del TDA vector*/
+
+bool vector_cargar(vector_t *v, void *dato, int *used);
 
 vector_t * vector_crear(size_t s);
 
 void vector_proc(vector_t *v);
 
 void vector_destruir(vector_t *v);
+
+/*Prototipos de funciones usadas con el op_code que interactuan con datos del vector TDA*/
+
+bool vector_op_leer(vector_t *v, int operand);
+
+void vector_op_guardar(vector_t *v, int operand, palabra_t acc);
+
+void vector_op_guardarp(vector_t *v, int operand, palabra_t acc);
 
 #endif

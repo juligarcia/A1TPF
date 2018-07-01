@@ -35,10 +35,31 @@
 typedef enum{OP_LEER = LEER, OP_ESCRIBIR = ESCRIBIR, OP_CARGAR = CARGAR, OP_GUARDAR = GUARDAR, OP_PCARGAR = PCARGAR, OP_PGUARDAR = PGUARDAR, OP_SUMAR = SUMAR, OP_RESTAR = RESTAR, OP_DIVIDIR = DIVIDIR,
 OP_MULTIPLICAR = MULTIPLICAR, OP_JMP = JMP, OP_JMPNEG = JMPNEG, OP_JMPZERO = JMPZERO, OP_JNZ = JNZ, OP_DJNZ = DJNZ, OP_HALT = HALT}opcode;
 
-typedef  unsigned short int palabra_t;
+typedef short int palabra_t;
 
 typedef struct simpletron_t {vector_t *memory; palabra_t acc; size_t pc; size_t mem;}simpletron_t;
 
-/*OP CODE opciones para poder comparar en switch*/
+/*Prototipos de funciones del OP_code que interactuan con el simpletron*/
+
+void simpletron_op_cargar(simpletron_t *simpletron, int operand);
+
+void simpletron_op_sumar(simpletron_t *simpletron, int operand);
+
+void simpletron_op_restar(simpletron_t *simpletron, int operand);
+
+void simpletron_op_dividir(simpletron_t *simpletron, int operand);
+
+void simpletron_op_multiplicar(simpletron_t *simpletron, int operand);
+
+bool simpletron_op_jmp(vector_t *v, int *k, int operand);
+
+bool simpletron_op_jmpzero(simpletron_t *simpletron, int *k, int operand);
+
+bool simpletron_op_jmz(simpletron_t *simpletron, int *k, int operand);
+
+void simpletron_op_djnz(simpletron_t *simpletron, int *k, int operand);
+
+void simpletron_op_cargarp(simpletron_t *simpletron, int operand);
+
 							
 #endif
