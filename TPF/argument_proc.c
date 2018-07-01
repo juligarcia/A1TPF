@@ -4,17 +4,17 @@
 /*A lo que se apunta con esta funcion, es a un procesamiento no posicional de argumentos, en donde el usuario puede ingresar los argumentos mediante linea de comandos
   en el orden deseado, como por ejemplo poner los nombres de archvios de entrada desordenados e intercalados con otros "flags".*/
 
-status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, char *fpos){
+status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, int *fpos){
 
 	/*Los argumentos a esta funcion son los conocidos argc, argv, y los adicionales flags para marca el estado de los parametros, la estructura simpletron, principal para el funcionamiento del programa,
 	  que aqui nos sirve para estabelcer la cantidad de memoria a usar. En esta nueva implementacion del trabajo, en esta funcion, se intenta mejorar el procesamiento anterior, y dado que se puede contar 
 	  con una cantidad mayor de archivos de entrada, se apuntara con el puntero char *fpos a la posicion de argv donde comienzan los archivos de entrada*/
 
-	int i, count = 0, aux;
+	int i, count = 0, aux, pos;
 	char *ptr;
 
-	fpos = NULL;
 	flags->help = false;
+	flags->stdin = false;
 	simpletron->mem = DEFAULT_MEM_SIZE;
 
 	/*Se valida la cantidad minima de argumentos, ya que por lo menos se deberia recibir el argumento "-h", pero como maximo no se tiene tope, dado la cantidad de archivos de entrada*/
@@ -75,9 +75,11 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 			else{
 
 				/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el/los datos restantes son nombres de archivos de entrada
-				por lo que se opta por guardar su direccion en un char * */
+				por lo que se opta por guardar su posicion, es decir el estado del iterador, en un puntero a int para asi despues poder iterar sobre argv facilemtene */
 
-				fpos = argv[i];
+				pos = i;
+
+				fpos = &pos;
 
 				i = argc;
 

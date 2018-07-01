@@ -1,6 +1,6 @@
-#define AR_AYUDA "help-es.txt"
-#define AR_BIENVENIDA "hello-es.txt"
-#define MSJ_BIENVENIDA "Bievenido a Simpletron"
+#define FILE_HELP "help_es.txt"
+#define FILE_WELCOME "welcome_es.txt"
+
 #define MSJ_INGRESE_POS "Ingrese la palabra a guardar en la posicion de memoria"
 /*Mensajes en ESPAÑOL para el seguimiento del procedimiento*/
 #define MSJ_COMIENZO_PROC "*** INICIO EJECUCION DEL SIMPLETRON ***"
@@ -26,7 +26,7 @@
 #define MSJ_INSTRUCCION "Instruccion:"
 #define MSJ_MEMORIA "Memoria:"
 
-#define MSJ_AR_ENTRADA "Archivo de entrada"
+#define MSG_ENTRY_FILE "Archivo de entrada"
 #define MSJ_AR_SALIDA "Archivo de salida"
 #define MSJ_CANT_PROC "Cantidad de procesos"
 #define MSJ_NO_IN "No hay archivo de entrada"

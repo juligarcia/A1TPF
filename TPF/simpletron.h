@@ -22,6 +22,8 @@
 #define JNZ 43
 #define DJNZ 44
 #define HALT 45
+
+#define SEPARATOR "?"
 #define END_READ -99999
 
 /*Memoria default para los argumentos de linea de comando*/
@@ -30,12 +32,12 @@
 
 /*Tipo enumerativos y estructuras usadas en el simpletron*/
 
-typedef enum{ARG_LEER = LEER, ARG_ESCRIBIR = ESCRIBIR, ARG_CARGAR = CARGAR, ARG_GUARDAR = GUARDAR, ARG_PCARGAR = PCARGAR, ARG_PGUARDAR = PGUARDAR, ARG_SUMAR = SUMAR, ARG_RESTAR = RESTAR, ARG_DIVIDIR = DIVIDIR,
-ARG_MULTIPLICAR = MULTIPLICAR, ARG_JMP = JMP, ARG_JMPNEG = JMPNEG, ARG_JMPZERO = JMPZERO, ARG_JNZ = JNZ, ARG_DJNZ = DJNZ, ARG_HALT = HALT}opcode;
+typedef enum{OP_LEER = LEER, OP_ESCRIBIR = ESCRIBIR, OP_CARGAR = CARGAR, OP_GUARDAR = GUARDAR, OP_PCARGAR = PCARGAR, OP_PGUARDAR = PGUARDAR, OP_SUMAR = SUMAR, OP_RESTAR = RESTAR, OP_DIVIDIR = DIVIDIR,
+OP_MULTIPLICAR = MULTIPLICAR, OP_JMP = JMP, OP_JMPNEG = JMPNEG, OP_JMPZERO = JMPZERO, OP_JNZ = JNZ, OP_DJNZ = DJNZ, OP_HALT = HALT}opcode;
 
 typedef  unsigned short int palabra_t;
 
-typedef struct simpletron_t {palabra_t *palabras; palabra_t acc; size_t pc; int mem;}simpletron_t;
+typedef struct simpletron_t {vector_t *memory; palabra_t acc; size_t pc; size_t mem;}simpletron_t;
 
 /*OP CODE opciones para poder comparar en switch*/
 							
