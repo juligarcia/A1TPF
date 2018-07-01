@@ -12,6 +12,7 @@
 #include "vector.h"
 #include "simpletron.h"
 #include "argument_proc.h"
+#include "print.h"
 
 /*Seleccion del lenguaje, ES ESPAÑOL, US INGLES*/
 
@@ -28,7 +29,7 @@ typedef enum {t, b, e}specifier_t;
 
 char proc_file_name(char **fname);
 
-bool proc_txt(char *filename, vector_t *v, int *used, void (*vector_cargar)(vector_t *v, void *dato, int *used));
+bool proc_txt(char *filename, vector_t *v, int *used, bool (*vector_cargar)(vector_t *v, void *dato, int *used));
 
 bool proc_bin(char *filename, vector_t *v, int *used);
 

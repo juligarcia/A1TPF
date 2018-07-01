@@ -1,22 +1,20 @@
+/*Proteccion contra inclusion mulitple*/
+
+#ifndef LANG__US
+#define LANG__US
+
+/*Archivos a ser impresos en ingles*/
+
 #define FILE_HELP "help_us.txt"
 #define FILE_WELCOME "welcome_us.txt"
 
-#define MSJ_INGRESE_POS "Enter the word to be saved on the following memory position"
 /*Mensajes en INGLES para el seguimiento del procedimiento*/
+
 #define MSJ_COMIENZO_PROC "*** SIMPLETRONS EXECUTION STARTED ***"
-#define MSJ_LEER "The word has been saved"
-#define MSJ_POS "at memory position"
-#define MSJ_STOUT "there is the value"
-#define MSJ_CARGA "It has been saved into the accumulator the word from the following memory position"
-#define MSJ_GUARDAR "The accumulators value has been saved into the following memory position"
-#define MSJ_SUMA "It has been added to the accumulators value the word from the following memory position"
-#define MSJ_RESTA "It has been substracted to the accumulator value the word from the following memory position"
-#define MSJ_DIV "The accumulators value has been divided by the word from the following memory position"
-#define MSJ_MULT "The accumulators value has been multiplied by the word from the following memory position"
-#define MSJ_JMP "Jumpled to the order in the following memory position"
-#define MSJ_CARGARP "It has been saved into the accumulator the value pointed by the pointer in the following memory position"
-#define MSJ_GUARDARP "The accumulators value has been saved into the pointed memory slot by the pointer in the following position"
-#define MSJ_FIN_DEL_PROGRAMA "*** SIMPLETRONS EXECUTINO ENDED **+"
+#define MSJ_INGRESE_POS "Enter the word to be saved on the following memory position"
+#define MSJ_POS "At memory position"
+#define MSJ_FIN_DEL_PROGRAMA "*** SIMPLETRONS EXECUTINO ENDED ***"
+
 /*Mensajes en INGLES para impresion de datos*/
 #define MSJ_REGISTRO "REGISTRY:"
 #define MSJ_ACUMULADOR "Accumulator:"
@@ -35,3 +33,5 @@
 /*Mensajes en INGLES para las diferentes funciones*/
 /*Mensajes para la funcion grabar_fichero_txt en INGLES*/
 #define MSJ_AR_GUARDADO "Name of the saved file"
+
+#endif

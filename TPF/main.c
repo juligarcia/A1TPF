@@ -126,7 +126,7 @@ char proc_file_name(char **fname){
 } 
 
 
-bool proc_txt(char *filename, vector_t *v, int *used, void (*vector_cargar)(vector_t *v, void *dato, int *used)){
+bool proc_txt(char *filename, vector_t *v, int *used, bool (*vector_cargar)(vector_t *v, void *dato, int *used)){
 
 	char buffer[MAX_BUFFER], *buffer2;
 	FILE *fp;
@@ -218,13 +218,13 @@ bool proc_simpletron(simpletron_t *simpletron){
 	
 	printf("%s\n\n", MSJ_COMIENZO_PROC);
 
-	for(k = 0; k < simpletron->memory->size && i = 0; k++){
+	for(k = 0; k < simpletron->memory->size && i == 0; k++){
 
-		op_code = *(palabra_t)simpletron->memory->dato[k];
+		op_code = *(palabra_t *)simpletron->memory->datos[k];
 		op_code = op_code >> SHIFT_1;
 		op_code = op_code & MASK_2;
 
-		operand = (*(palabra_t)simpletron->memory-dato[k]) & ~MASK_1;
+		operand = (*(palabra_t *)simpletron->memory->datos[k]) & ~MASK_1;
 
 		switch (op_code){
 			
@@ -241,7 +241,7 @@ bool proc_simpletron(simpletron_t *simpletron){
 				break;
 
 			case OP_ESCRIBIR: 		
-				printf("%s [%02d]: %d\n", MSJ_POS, opeand, simpletron->memory->datos[operand]);
+				printf("%s [%02d]: %d\n", MSJ_POS, operand, *(palabra_t *)simpletron->memory->datos[operand]);
 				simpletron->pc = k;
 
 				break;								
@@ -309,7 +309,7 @@ bool proc_simpletron(simpletron_t *simpletron){
 				break;
 
 			case OP_JMPZERO: 
-				if(simpletron_op_jmpzero(&simpletron, &k, operand) == false)
+				if(simpletron_op_jmpzero(simpletron, &k, operand) == false)
 					return false;
 
 				simpletron->pc = k;
@@ -317,14 +317,13 @@ bool proc_simpletron(simpletron_t *simpletron){
 				break;
 
 			case OP_JNZ: 
-				if(op_jmz(simpletron, &k, operand) == false)
+				if(simpletron_op_jmz(simpletron, &k, operand) == false)
 					return false;
 
 				break;
 
 			case OP_DJNZ: 		
-				if(simpletron_op_djnz(simpletron, &k, operand) == false)
-					return false;
+				simpletron_op_djnz(simpletron, &k, operand);
 
 				simpletron->pc = k;
 
@@ -374,7 +373,7 @@ bool vector_op_leer(vector_t *v, int operand){
 	if(*ptr != '\0' && *ptr != '\n')
 		return false;
 
-	*(palabra_t)v->datos[operand] = aux;
+	*(palabra_t *)v->datos[operand] = aux;
 
 	return true;
 }
@@ -384,7 +383,7 @@ void simpletron_op_cargar(simpletron_t *simpletron, int operand){
 	
 	/*Carga una palabra de la memoria al acumulador*/
 
-	simpletron->acc = *(palabra_t)simpletron->memory->datos[operand];
+	simpletron->acc = *(palabra_t *)simpletron->memory->datos[operand];
 
 }
 
@@ -503,7 +502,7 @@ void simpletron_op_djnz(simpletron_t *simpletron, int *k, int operand){
 
 	/*Decrementa el acumulador por el contenido de la posicion de memoria indicado y, si este no es 0, vuelve al comienzo del ciclo*/
 
-	if((simpletron->acc -= simpletron->memory->datos[operand]) == 0) 
+	if((simpletron->acc -= *(palabra_t *)simpletron->memory->datos[operand]) == 0) 
 		*k = -1;
 
 }
@@ -513,7 +512,7 @@ void simpletron_op_cargarp(simpletron_t *simpletron, int operand){
 
 	/*Es homologa a la funcion cargar, pero se indica una posicion de memoria donde se sacara un puntero*/
 
-	simpletron->acc = simpletron->memory->datos[simpletron->memory->datos[operand]]; 
+	simpletron->acc = *(palabra_t *)simpletron->memory->datos[*(palabra_t *)simpletron->memory->datos[operand]]; 
 
 }
 
@@ -522,6 +521,6 @@ void vector_op_guardarp(vector_t *v, int operand, palabra_t acc){
 
 	/*Es homologa a la funcion guardar, pero con puntero como operando*/
 
-	v->datos[v->datos[operand]] = acc;
+	*(palabra_t *)v->datos[*(palabra_t *)v->datos[operand]] = acc;
 
 }

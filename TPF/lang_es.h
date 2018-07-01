@@ -1,3 +1,8 @@
+/*Proteccion contra inclusion mulitple*/
+
+#ifndef LANG__ES
+#define LANG__ES
+
 #define FILE_HELP "help_es.txt"
 #define FILE_WELCOME "welcome_es.txt"
 
@@ -35,3 +40,5 @@
 /*Mensajes en ESPAÑOL para las diferentes funciones*/
 /*Mensajes para la funcion grabar_fichero_txt en ESPAÑOL*/
 #define MSJ_AR_GUARDADO "Nombre del archivo guardado"
+
+#endif

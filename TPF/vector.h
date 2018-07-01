@@ -32,8 +32,8 @@ void vector_destruir(vector_t *v);
 
 bool vector_op_leer(vector_t *v, int operand);
 
-void vector_op_guardar(vector_t *v, int operand, palabra_t acc);
+void vector_op_guardar(vector_t *v, int operand, short int acc);
 
-void vector_op_guardarp(vector_t *v, int operand, palabra_t acc);
+void vector_op_guardarp(vector_t *v, int operand, short int acc);
 
 #endif
