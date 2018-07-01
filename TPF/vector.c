@@ -1,6 +1,6 @@
 #include "main.h"
 
-/*Prototipos de funciones a usar con el nuevo tipo de dato abstracto*/
+/*Prototipos de funciones a usar con el nuevo TDA vector*/
 
 vector_t * vector_crear(size_t s){
 
@@ -24,13 +24,35 @@ vector_t * vector_crear(size_t s){
 }
 
 
-void vector_destruir(vector_t *v){
+void vector_destruir(vector_t **v){
+
+	int i;
+
+	if(v && *v){
+		if((*v)->datos){
+			for(i = 0; i < (*v)->size; i++){
+				free((*v)->datos[i]);
+			}
+
+			free((*v)->datos);
+		}
+
+		free(*v);
+		*v = NULL;
+	}
+}
+
+
+void vector_limpiar_datos(vector_t *v){
+
+	int i;
 
 	if(v){
-		if(v->datos)
-			free(v->datos);
-		free(v);
-		v = NULL;
+		if(v->datos){
+			for(i = 0; i < v->size; i++){
+				free(v->datos[i]);
+			}
+		}
 	}
 }
 

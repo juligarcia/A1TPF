@@ -4,14 +4,15 @@
 /*A lo que se apunta con esta funcion, es a un procesamiento no posicional de argumentos, en donde el usuario puede ingresar los argumentos mediante linea de comandos
   en el orden deseado, como por ejemplo poner los nombres de archvios de entrada desordenados e intercalados con otros "flags".*/
 
-status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, int *fpos){
+status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *simpletron, nodo_t *nodo){
 
 	/*Los argumentos a esta funcion son los conocidos argc, argv, y los adicionales flags para marca el estado de los parametros, la estructura simpletron, principal para el funcionamiento del programa,
 	  que aqui nos sirve para estabelcer la cantidad de memoria a usar. En esta nueva implementacion del trabajo, en esta funcion, se intenta mejorar el procesamiento anterior, y dado que se puede contar 
 	  con una cantidad mayor de archivos de entrada, se apuntara con el puntero char *fpos a la posicion de argv donde comienzan los archivos de entrada*/
 
-	int i, count = 0, aux, pos;
+	int i, count = 0, aux;
 	char *ptr;
+	nodo_t *nodo_aux;
 
 	flags->help = false;
 	flags->stdin = false;
@@ -30,6 +31,7 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 
 			if(!strcmp(argv[i], ARG_H)){
 				flags->help = true;
+				break;
 			}
 
 			else if(!strcmp(argv[i], ARG_F)){
@@ -77,12 +79,45 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 				/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el/los datos restantes son nombres de archivos de entrada
 				por lo que se opta por guardar su posicion, es decir el estado del iterador, en un puntero a int para asi despues poder iterar sobre argv facilemtene */
 
-				pos = i;
+				nodo_aux = nodo;
 
-				fpos = &pos;
+				for(; i < argc; i++){
+					if(!nodo_aux)
+						return ST_ERROR_LISTA;
 
-				i = argc;
+					if(nodo_aux->dato){
+						lista_destruir(&nodo_aux);
+						return ST_ERROR_LISTA;
+					}
 
+					if(nodo_aux->next){
+						lista_destruir(&nodo_aux);
+						return ST_ERROR_LISTA;
+					}
+
+					if(!(nodo_aux->next = lista_crear()))
+						return ST_ERROR_LISTA;
+
+					if(!nodo_aux->next)
+						return ST_ERROR_LISTA;
+
+					if(!nodo_aux->next){
+						if(!(nodo_aux->next = lista_crear()))
+							return ST_ERROR_LISTA;
+
+						if(!nodo_aux->next)
+							return ST_ERROR_LISTA;
+					}
+
+					nodo_aux->dato = (char *)malloc(strlen(argv[i]) + 1);
+
+					if(!nodo_aux->dato)
+						return ST_ERROR_LISTA;
+
+					strcpy((char *)nodo_aux->dato, argv[i]);
+
+					nodo_aux = nodo_aux->next;
+				}
 			}
 		}
 

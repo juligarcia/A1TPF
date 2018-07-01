@@ -26,7 +26,9 @@ vector_t * vector_crear(size_t s);
 
 void vector_proc(vector_t *v);
 
-void vector_destruir(vector_t *v);
+void vector_destruir(vector_t **v);
+
+void vector_limpiar_datos(vector_t *v);
 
 /*Prototipos de funciones usadas con el op_code que interactuan con datos del vector TDA*/
 

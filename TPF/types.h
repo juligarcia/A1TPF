@@ -6,6 +6,6 @@
 
 typedef enum {false, true}bool;
 
-typedef enum{ST_OK, ST_ERROR_FEW_ARG}status_t;
+typedef enum{ST_OK, ST_ERROR_FEW_ARG, ST_ERROR_LISTA}status_t;
 
 #endif

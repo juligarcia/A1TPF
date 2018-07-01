@@ -30,6 +30,11 @@
 
 #define DEFAULT_MEM_SIZE 50
 
+/*Nombre del archivo de salida para el dump en txt y binario*/
+
+#define DUMP_TXT "dump.txt"
+#define DUMP_BIN "dump.bin"
+
 /*Tipo enumerativos y estructuras usadas en el simpletron*/
 
 typedef enum{OP_LEER = LEER, OP_ESCRIBIR = ESCRIBIR, OP_CARGAR = CARGAR, OP_GUARDAR = GUARDAR, OP_PCARGAR = PCARGAR, OP_PGUARDAR = PGUARDAR, OP_SUMAR = SUMAR, OP_RESTAR = RESTAR, OP_DIVIDIR = DIVIDIR,
@@ -64,6 +69,10 @@ void simpletron_op_cargarp(simpletron_t *simpletron, int operand);
 bool simpletron_op_jmpneg(simpletron_t *simpletron, int *k, int operand);
 
 bool proc_simpletron(simpletron_t *simpletron);
+
+/*Prototipos de funciones de dump*/
+
+void dump_txt(simpletron_t simpletron, FILE *pf, char *filename);
 
 							
 #endif

@@ -4,22 +4,32 @@ int main(int argc, char *argv[]){
 
 	flags_t flags;
 	simpletron_t simpletron;
-	int i, j = 1, fpos = 0, used = 0;
+	int j = 1, used = 0;
+	nodo_t *nodo, *nodo_aux;
+	FILE *output;
 
 	/*Se inicializan el program counter (pc) y el acumulador (acc) en 0*/
 
 	simpletron.acc = 0;
 	simpletron.pc = 0;
 
+	/*Se crea el primer nodo de la lista*/
+
+	if(!(nodo = lista_crear()))
+		return EXIT_FAILURE;
+
 	/*Se inicia el procesamiento de argumentos*/
 
-	if(argument_proc(argc, argv, &flags, &simpletron, &fpos) != ST_OK)
+	if(argument_proc(argc, argv, &flags, &simpletron, nodo) != ST_OK)
 		return EXIT_FAILURE;
 
 	/*Si el estado del flag "-h" se encuentra en true, se imprime la ayuda en pantalla y luego se termina la operacion del programa*/
 
 	if(flags.help == true){
 		print_txt(FILE_HELP);
+		lista_destruir(&nodo);
+		/*vector_destruir(&(simpletron.memory));*/
+
 		return EXIT_SUCCESS;
 	}
 
@@ -32,6 +42,18 @@ int main(int argc, char *argv[]){
 
 	print_txt(FILE_WELCOME);
 
+	/*Se abre el archivo correspondiente para el dump final. Se abre antes, dado que despues entra en un ciclo, es mas comodo dejarlo abierto e ir agregando datos*/
+
+	if(flags.fotxt == true && flags.fobin  == false){
+		if(!(output = fopen(DUMP_TXT, "w")))
+			return EXIT_FAILURE;
+	}
+
+	if(flags.fotxt == false && flags.fobin  == true){
+		if(!(output = fopen(DUMP_BIN, "w")))
+			return EXIT_FAILURE;
+	}
+
 	/*Se verfica el STREAM de entrada de datos*/
 
 	if(flags.stdin == true){
@@ -39,85 +61,108 @@ int main(int argc, char *argv[]){
 		if(proc_stdin(simpletron.memory, &used) == false)
 			return EXIT_FAILURE;
 
+		vector_proc(simpletron.memory);
+
+		/*Se inicia el procesamiento del simpletron*/
+
+		if(proc_simpletron(&simpletron) == false)
+			return EXIT_FAILURE;
+
+
 	}
 
 	else{
 
 		/*Si no entra en el if, quiere decir que el flag es false, por lo que no debera ser por stdin la entrada de datos, hay que verificar si hay archivos de entrda.
-	  	De ser asi, el valor de fpos deberia ser diferente de 0, ya que 0 es un valor incorrecto. 
+	  	De ser asi, el puntero void de la lista deberia ser diferente de NULL, ya que al menos 1 archivo debe ser ingresado.
 	  	En caso de que no pase la validacion se terminara el programa*/
 
-		if(!fpos)
+		if(!nodo->dato)
 			return EXIT_FAILURE;
 
 		/*Como se pueden ingresar varios archivos de entrada al programa, en la funcion argument_proc se guarda la direccion del primer nombre de archivo*/
 		/*Se imprimen los nombres de archivos de entrada y se procesan a la vez*/
 
-		for(i = fpos; i < argc; i++, j++){
+		nodo_aux = nodo;
 
-			printf("%s[%d]: %s", MSG_ENTRY_FILE, j, argv[i]);
+		while(nodo_aux){
+			used = 0;
 
-			switch(proc_file_name(&argv[i])){
+			printf("%s[%d]: %s", MSJ_ENTRY_FILE, j, (char *)nodo_aux->dato);
+
+			switch(proc_file_name(nodo_aux)){
 
 				case t:
-					proc_txt(argv[i], simpletron.memory, &used, vector_cargar);
+					proc_txt((char *)nodo_aux->dato, simpletron.memory, &used, vector_cargar);
 					break;
 
 				case b:
-					proc_bin(argv[i], simpletron.memory, &used);
+					proc_bin((char *)nodo_aux->dato, simpletron.memory, &used);
 					break;
 
 				case e:
-					return EXIT_FAILURE;
+					continue;
+				}
+
+
+			/*Se procesan los datos guardados en la memoria. Dado que cada dato ingresado es una palabra da 7 digitos con signo, estas se deben procesar de forma tal que los 7 bits de mayor significancia
+			 seran el opcode, y los 9 de menor significancia seran el operando*/
+
+			vector_proc(simpletron.memory);
+
+			/*Se inicia el procesamiento del simpletron*/
+
+			if(proc_simpletron(&simpletron) == false)
+				return EXIT_FAILURE;
+
+			/*Una vez procesados los datos, se hace el dump correspondiente*/
+
+			if(flags.fotxt == true && flags.fobin  == false){
+
+				dump_txt(simpletron, output, (char *)nodo_aux->dato);
+
 			}
+
+			vector_limpiar_datos(simpletron.memory);
+
+			nodo_aux = nodo_aux->next;
 		}
 	}
 
-/*Se procesan los datos guardados en la memoria. Dado que cada dato ingresado es una palabra da 7 digitos con signo, estas se deben procesar de forma tal que los 7 bits de mayor significancia
- seran el opcode, y los 9 de menor significancia seran el operando*/
+lista_destruir(&nodo);
+vector_destruir(&(simpletron.memory));
 
-vector_proc(simpletron.memory);
-
-/*Se inicia el procesamiento del simpletron*/
-
-if(proc_simpletron(&simpletron) == false)
-	return EXIT_FAILURE;
-
-
-return 0;
-
-
-
+return EXIT_SUCCESS;
 
 }
 
 
-char proc_file_name(char **fname){
+char proc_file_name(nodo_t *nodo){
 
 	char *aux;
 
 	/*Se busca el caracter ':' dentro del string de nombre del archivo*/
 	/*Si no se encuentra se interpreta como txt*/
 
-	if(!(aux = strchr(*fname, FILE_SPECIFIER)))
+	if(!(aux = strchr(nodo->dato, FILE_SPECIFIER)))
 		return SPECIFIER_TXT;
 
 	/*En caso de ser encontrado, se interpreta lo que se encuentra antes de este caracter, de ser un string de mas de largo mas de 1, se considera parte del nombre del archivo y se interpreta como txt.
 	En caso de tener largo 1 lo que se encuentre antes, se comparara con los especificadores de binario y texto, 'b' y 't', respectivamente, para determinar que tipo de archivo es. En caso de no ser ninguno de estos
 	tambien se considerara parte del nombre del archivo y se dira que es un .txt*/
 
-	if((strlen(*fname) - strlen(aux)) != SPECIFIER_LEN)
+	if((strlen(nodo->dato) - strlen(aux)) != SPECIFIER_LEN)
 		return SPECIFIER_TXT;
 
 	/*En caso de que el formato sea "b:namefile" o "t:namefile" se corre el puntero hacia el primer caracter donde empieza el nombre*/
 
-	if(*fname[0] == SPECIFIER_BIN){
-		*fname += 2;
+	if(((char*)nodo->dato)[0] == SPECIFIER_BIN){
+		*(char *)nodo->dato += 2;
 		return SPECIFIER_BIN;
 	}
 
-	if(*fname[0] == SPECIFIER_TXT){
-		*fname += 2;
+	if(((char *)nodo->dato)[0] == SPECIFIER_TXT){
+		*(char *)nodo->dato += 2;
 		return SPECIFIER_TXT;
 	}
 
@@ -523,4 +568,53 @@ void vector_op_guardarp(vector_t *v, int operand, palabra_t acc){
 
 	*(palabra_t *)v->datos[*(palabra_t *)v->datos[operand]] = acc;
 
+}
+
+
+void dump_txt(simpletron_t simpletron, FILE *pf, char *filename){
+
+	int op_code, operand, fil, i, j;
+
+
+	fprintf(pf, "%s:%s\n", MSJ_DUMP_FILE, filename);
+	
+	fprintf(pf, "%s\n", MSJ_REGISTRO);
+
+	fprintf(pf, "%s:%8x\n", MSJ_ACUMULADOR, simpletron.acc);
+
+	fprintf(pf, "%s:%8ld\n", MSJ_PCOUNT, simpletron.pc);
+
+	fprintf(pf, "%s:%+d\n", MSJ_INSTRUCCION, *(palabra_t *)simpletron.memory->datos[simpletron.pc]);
+
+	op_code = *(palabra_t *)simpletron.memory->datos[simpletron.pc];
+	op_code = op_code >> SHIFT_1;
+	op_code = op_code & MASK_2;
+
+	operand = (*(palabra_t *)simpletron.memory->datos[simpletron.pc]) & ~MASK_1;
+
+	fprintf(pf, "%s:%02d\n", MSJ_OPCODE, op_code);
+
+	fprintf(pf, "%s:%02d\n", MSJ_OPERANDO, operand);
+
+	/*Se imprime la memoria en forma de matriz*/
+    /*Se calcula la cantidad de filas correspondientes dependiendo de la cantidad de memoria que se pidio ingresando el argumento "-m"*/
+
+    if(((simpletron.memory->size) % 16) != 0)
+        fil = (simpletron.memory->size / 16) + 1;
+    
+    else
+        fil = (simpletron.memory->size) / 16;
+
+    for(i = 0; i < fil; i++){
+
+    	fprintf(pf, "%03x", 16*i);
+
+    	for(j = 0; j < 16; j++){
+
+    		fprintf(pf, "%7.04x", *(palabra_t *)simpletron.memory->datos[j]);
+
+    	}
+    }
+
+    fprintf(pf, "\n");
 }

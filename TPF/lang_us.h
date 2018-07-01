@@ -1,8 +1,3 @@
-/*Proteccion contra inclusion mulitple*/
-
-#ifndef LANG__US
-#define LANG__US
-
 /*Archivos a ser impresos en ingles*/
 
 #define FILE_HELP "help_us.txt"
@@ -24,7 +19,7 @@
 #define MSJ_INSTRUCCION "Instruction:"
 #define MSJ_MEMORIA "Memory:"
 
-#define MSG_ENTRY_FILE "Entry file"
+#define MSJ_ENTRY_FILE "Entry file"
 #define MSJ_AR_SALIDA "Output file"
 #define MSJ_CANT_PROC "Number of processes"
 #define MSJ_NO_IN "No entry file"
@@ -33,5 +28,3 @@
 /*Mensajes en INGLES para las diferentes funciones*/
 /*Mensajes para la funcion grabar_fichero_txt en INGLES*/
 #define MSJ_AR_GUARDADO "Name of the saved file"
-
-#endif
