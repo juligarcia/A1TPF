@@ -16,12 +16,15 @@ void lista_destruir(nodo_t **nodo){
 
 	nodo_t *current = *nodo, *next;
 
-	while(current != NULL){
+	if(current){
+		while(current->next){
 
-		next = current->next;
+			next = current->next;
+			free(current);
+			current = next;
+
+		} 
 		free(current);
-		current = next;
-
-	} 
-	*nodo = NULL;
+		*nodo = NULL;
+	}
 }

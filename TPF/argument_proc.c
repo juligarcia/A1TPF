@@ -14,14 +14,16 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 	char *ptr;
 	nodo_t *nodo_aux;
 
-	flags->help = false;
-	flags->stdin = false;
-	simpletron->mem = DEFAULT_MEM_SIZE;
-
 	/*Se valida la cantidad minima de argumentos, ya que por lo menos se deberia recibir el argumento "-h", pero como maximo no se tiene tope, dado la cantidad de archivos de entrada*/
 
 	if(argc < MIN_ARGC)
 		return ST_ERROR_FEW_ARG;
+
+	flags->fotxt = true;
+	flags->fobin = false;
+	flags->help = false;
+	flags->stdin = false;
+	simpletron->mem = DEFAULT_MEM_SIZE;
 
 	/*Se recorre argv en busca de los arguentos y se llevan a cabo los cambios necesarios*/
 
@@ -34,89 +36,76 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 				break;
 			}
 
-			else if(!strcmp(argv[i], ARG_F)){
+			else{
 
-				if(!strcmp(argv[i + 1], FMT_TXT)){
-					flags->fotxt = true;
-					flags->fobin = false;
-					count = 1;
-				}
+				if(!strcmp(argv[i], ARG_F)){
 
-				else if(!strcmp(argv[i + 1], FMT_BIN)){
-
-					flags->fotxt = false;
-					flags->fobin = true;
-					count = 1;
+					if(!strcmp(argv[i + 1], FMT_TXT)){
+						flags->fotxt = true;
+						flags->fobin = false;
+						count = 1;
 					}
 
-				else{
-					/*Caso default*/
-					flags->fotxt = true;
-					flags->fobin = false;
-				}
-			}
+					if(!strcmp(argv[i + 1], FMT_BIN)){
 
-			else if(!strcmp(argv[i], ARG_M)){
-
-				if(!(aux = strtol(argv[i + 1], &ptr, 10))){
-
-					if(*ptr != '\0'){
+						flags->fotxt = false;
+						flags->fobin = true;
+						count = 1;
 					}
 
 					else{
-						simpletron->mem = aux;
-						count = 1;
+						/*Caso default*/
+						flags->fotxt = true;
+						flags->fobin = false;
 					}
 				}
-			}
 
-			else if(!strcmp(argv[i], ARG_STDIN))
+				else{
 
-				flags->stdin = true;
+					if(!strcmp(argv[i], ARG_M)){
+
+						if((aux = strtol(argv[i + 1], &ptr, 10))){
+
+							if(ptr == argv[i]){
+								continue;
+							}
+
+							if(*ptr != '\0' && *ptr != '\n'){
+								continue;
+							}
+
+							simpletron->mem = aux;
+							count = 1;					
+						}
+					}
+
+					else{
+
+						if(!strcmp(argv[i], ARG_STDIN))
+
+							flags->stdin = true;
 						
-			else{
+						else{
 
-				/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el/los datos restantes son nombres de archivos de entrada
-				por lo que se opta por guardar su posicion, es decir el estado del iterador, en un puntero a int para asi despues poder iterar sobre argv facilemtene */
+							/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el/los datos restantes son nombres de archivos de entrada
+							por lo que se opta por guardar su posicion, es decir el estado del iterador, en un puntero a int para asi despues poder iterar sobre argv facilemtene */
 
-				nodo_aux = nodo;
+							nodo_aux = nodo;
 
-				for(; i < argc; i++){
-					if(!nodo_aux)
-						return ST_ERROR_LISTA;
+							if(!nodo_aux)
+								return ST_ERROR_LISTA;
 
-					if(nodo_aux->dato){
-						lista_destruir(&nodo_aux);
-						return ST_ERROR_LISTA;
+							for(; i < argc; i++){
+
+								if(!(nodo_aux->next = lista_crear()))
+									return ST_ERROR_LISTA;
+
+								nodo_aux->dato = (char *)argv[i];
+
+								nodo_aux = nodo_aux->next;
+							}
+						}
 					}
-
-					if(nodo_aux->next){
-						lista_destruir(&nodo_aux);
-						return ST_ERROR_LISTA;
-					}
-
-					if(!(nodo_aux->next = lista_crear()))
-						return ST_ERROR_LISTA;
-
-					if(!nodo_aux->next)
-						return ST_ERROR_LISTA;
-
-					if(!nodo_aux->next){
-						if(!(nodo_aux->next = lista_crear()))
-							return ST_ERROR_LISTA;
-
-						if(!nodo_aux->next)
-							return ST_ERROR_LISTA;
-					}
-
-					nodo_aux->dato = (char *)malloc(strlen(argv[i]) + 1);
-
-					if(!nodo_aux->dato)
-						return ST_ERROR_LISTA;
-
-					strcpy((char *)nodo_aux->dato, argv[i]);
-
-					nodo_aux = nodo_aux->next;
 				}
 			}
 		}

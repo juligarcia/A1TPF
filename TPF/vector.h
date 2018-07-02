@@ -24,7 +24,7 @@ bool vector_cargar(vector_t *v, void *dato, int *used);
 
 vector_t * vector_crear(size_t s);
 
-void vector_proc(vector_t *v);
+void vector_proc(vector_t **v);
 
 void vector_destruir(vector_t **v);
 

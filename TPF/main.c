@@ -32,12 +32,12 @@ int main(int argc, char *argv[]){
 
 		return EXIT_SUCCESS;
 	}
-
+	
 	/*Se debe crear la estructura para la memoria del Simpletron*/
 
 	if(!(simpletron.memory = vector_crear(simpletron.mem)))
 		return EXIT_FAILURE;
-
+	
 	/*Se imprimen los mensajes de bienvenida*/
 
 	print_txt(FILE_WELCOME);
@@ -61,13 +61,12 @@ int main(int argc, char *argv[]){
 		if(proc_stdin(simpletron.memory, &used) == false)
 			return EXIT_FAILURE;
 
-		vector_proc(simpletron.memory);
+		vector_proc(&simpletron.memory);
 
 		/*Se inicia el procesamiento del simpletron*/
 
 		if(proc_simpletron(&simpletron) == false)
 			return EXIT_FAILURE;
-
 
 	}
 
@@ -88,7 +87,7 @@ int main(int argc, char *argv[]){
 		while(nodo_aux){
 			used = 0;
 
-			printf("%s[%d]: %s", MSJ_ENTRY_FILE, j, (char *)nodo_aux->dato);
+			printf("%s[%d]: %s", MSJ_ENTRY_FILE, j, (char *)nodo_aux->dato + 2);
 
 			switch(proc_file_name(nodo_aux)){
 
@@ -108,7 +107,7 @@ int main(int argc, char *argv[]){
 			/*Se procesan los datos guardados en la memoria. Dado que cada dato ingresado es una palabra da 7 digitos con signo, estas se deben procesar de forma tal que los 7 bits de mayor significancia
 			 seran el opcode, y los 9 de menor significancia seran el operando*/
 
-			vector_proc(simpletron.memory);
+			vector_proc(&simpletron.memory);
 
 			/*Se inicia el procesamiento del simpletron*/
 
@@ -157,12 +156,12 @@ char proc_file_name(nodo_t *nodo){
 	/*En caso de que el formato sea "b:namefile" o "t:namefile" se corre el puntero hacia el primer caracter donde empieza el nombre*/
 
 	if(((char*)nodo->dato)[0] == SPECIFIER_BIN){
-		*(char *)nodo->dato += 2;
+		nodo->dato = (char *)nodo->dato + 2;
 		return SPECIFIER_BIN;
 	}
 
 	if(((char *)nodo->dato)[0] == SPECIFIER_TXT){
-		*(char *)nodo->dato += 2;
+		nodo->dato = (char *)nodo->dato + 2;
 		return SPECIFIER_TXT;
 	}
 

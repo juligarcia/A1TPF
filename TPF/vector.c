@@ -72,27 +72,27 @@ bool vector_cargar(vector_t *v, void *dato, int *used){
 }
 
 
-void vector_proc (vector_t *v){
+void vector_proc (vector_t **v){
 
-	/*Hay que analizar los limites de estos parametros. Como la palabra sin procesar se guarda en una memoria con capacidad de 16bits el mayor numero posible a guardar es 65535. Esto se valida en la 
-	etapa anterior, por lo que los numeros ingresados seran menores a este. El mayor opcode posible sera 065*/
+	/*Hay que analizar los limites de estos parametros. Como la palabra sin procesar se guarda en una memoria con capacidad de 16bits y estas son con signo
+	el mayor numero posible a guardar es 32768 y -32768. Esto se valida en la etapa anterior, por lo que los numeros ingresados seran menores a este. El mayor opcode posible sera 032*/
 
 	palabra_t *aux, *aux2;
 	int i;
 
-	for(i = 0; i < v->size; i++){
+	for(i = 0; i < (*v)->size; i++){
 
-		aux = (palabra_t *)v->datos[i];
-		aux2 = (palabra_t *)v->datos[i];
+		aux = (palabra_t *)(*v)->datos[i];
+		aux2 = (palabra_t *)(*v)->datos[i];
 
 		*aux /= 10000;
-
+puts("3");
 		*aux2 -= 10000*(*aux);
-
+puts("4");
 		(*aux) << SHIFT_1;
 		(*aux) = (*aux) & MASK_1;
-
-		(*(palabra_t *)v->datos[i]) = (*aux) | (*aux2);
+puts("5");
+		(*(palabra_t *)(*v)->datos[i]) = (*aux) | (*aux2);
 		
 	}
 }
