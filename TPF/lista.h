@@ -15,5 +15,4 @@ nodo_t *lista_crear(void);
 
 void lista_destruir(nodo_t **nodo);
 
-
 #endif

@@ -219,28 +219,6 @@ bool vector_proc_stdin(vector_t *v, int *used){
 }
 
 
-
-/*status_t leer_fichero_bin(simpletron_t *simpletron, FILE *pf){
-	
-	int i;
-	
-	simpletron->palabras = (palabra_t *)calloc(simpletron->cant, sizeof(palabra_t));
-
-	for(i = 0; i < simpletron->cant; i++){
-		if(fread(&(simpletron->palabras[i]), sizeof(int), 1,pf) != 1){
-			return ST_ERROR_ARG_LEIDOS;
-		}
-	}
-	
-	if(i < simpletron->cant || i > simpletron->cant){
-		return ST_ERROR_OUT_RANG;
-	}
-	
-	return ST_OK;
-	
-}*/
-
-
 bool vector_proc_bin(char *filename, vector_t *v, int *used, bool (*vector_cargar)(vector_t *v, void *dato, int *used)){
 
 	int i, aux, bin1, bin2;

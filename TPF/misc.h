@@ -4,7 +4,7 @@
 
 #define PRINT__H 
 
-#define MSJ_STDOUT "Standard Out"
+#define MSJ_STDIN "Standard In"
 
 /*Macros para la funcion de procesar el nombre de los archivos*/
 
@@ -28,5 +28,7 @@ char proc_file_name(nodo_t *nodo);
 bool print_txt(char *file);
 
 void dump_txt(simpletron_t simpletron, FILE *pf, char *filename);
+
+bool dump_bin(simpletron_t simpletron, FILE *pf, char *filename);
 
 #endif

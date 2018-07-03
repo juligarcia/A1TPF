@@ -65,7 +65,12 @@ int main(int argc, char *argv[]){
 		/*Una vez procesados los datos, se hace el dump correspondiente*/
 
 		if(flags.fotxt == true && flags.fobin  == false)
-			dump_txt(simpletron, output, MSJ_STDOUT);
+			dump_txt(simpletron, output, MSJ_STDIN);
+
+		if(flags.fotxt == false && flags.fobin == true){
+			if(dump_bin(simpletron, output, MSJ_STDIN) ==false)
+				return EXIT_FAILURE;
+		}
 
 	}
 
@@ -119,6 +124,11 @@ int main(int argc, char *argv[]){
 			if(flags.fotxt == true && flags.fobin  == false)
 				dump_txt(simpletron, output, (char *)nodo_aux->dato);
 
+			if(flags.fotxt == false && flags.fobin == true){
+				if(dump_bin(simpletron, output, (char *)nodo_aux->dato) ==false)
+					return EXIT_FAILURE;
+			}
+
 			vector_limpiar_datos(simpletron.memory);
 
 			if(nodo_aux->next){
@@ -138,4 +148,3 @@ vector_destruir(&(simpletron.memory));
 return EXIT_SUCCESS;
 
 }
-

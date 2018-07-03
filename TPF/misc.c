@@ -111,3 +111,18 @@ void dump_txt(simpletron_t simpletron, FILE *pf, char *filename){
    
     fprintf(pf, "\n");
 }
+
+
+bool dump_bin(simpletron_t simpletron, FILE *pf, char *filename){
+
+	int i;	
+	
+	for(i = 0; i < simpletron.mem; i++){
+		
+		if(fwrite((palabra_t *)simpletron.memory->datos[i], 1, sizeof(palabra_t), pf) != 1){
+			return false;
+		}		
+	}
+
+	return true;
+}
