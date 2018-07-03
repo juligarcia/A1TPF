@@ -4,6 +4,8 @@
 
 #define MAIN__H 
 
+#define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,30 +15,17 @@
 #include "lista.h"
 #include "simpletron.h"
 #include "argument_proc.h"
-#include "print.h"
+#include "misc.h"
 
 /*Seleccion del lenguaje, ES ESPAÑOL, US INGLES*/
 
 #define LANG__ES
 #include "lang.h"
 
-#define FILE_SPECIFIER ':'
-#define SPECIFIER_LEN 1
-#define SPECIFIER_TXT 't'
-#define SPECIFIER_BIN 'b'
-#define SPECIFIER_ERROR 'e'
+#define NEXT_PROC "------------------------------------------------"
 
 typedef enum {t, b, e}specifier_t;
 
 char proc_file_name(nodo_t *nodo);
-
-bool proc_txt(char *filename, vector_t *v, int *used, bool (*vector_cargar)(vector_t *v, void *dato, int *used));
-
-bool proc_bin(char *filename, vector_t *v, int *used);
-
-bool proc_stdin(vector_t *v, int *used);
-
-#define MAX_BUFFER 100
-
 
 #endif

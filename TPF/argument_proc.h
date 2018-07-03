@@ -22,7 +22,7 @@
 #define FMT_TXT "txt"
 #define FMT_BIN "bin"
 
-typedef struct flags_t{bool help; bool fotxt; bool fobin; bool stdin;}flags_t;
+typedef struct flags_t{bool help; bool fotxt; bool fobin; bool stdinn;}flags_t;
 
 /*Prototipo de la funcion para procesamiento de argumentos*/
 

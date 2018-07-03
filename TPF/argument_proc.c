@@ -12,7 +12,7 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 
 	int i, count = 0, aux;
 	char *ptr;
-	nodo_t *nodo_aux;
+	nodo_t *temp = NULL;
 
 	/*Se valida la cantidad minima de argumentos, ya que por lo menos se deberia recibir el argumento "-h", pero como maximo no se tiene tope, dado la cantidad de archivos de entrada*/
 
@@ -22,7 +22,7 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 	flags->fotxt = true;
 	flags->fobin = false;
 	flags->help = false;
-	flags->stdin = false;
+	flags->stdinn = false;
 	simpletron->mem = DEFAULT_MEM_SIZE;
 
 	/*Se recorre argv en busca de los arguentos y se llevan a cabo los cambios necesarios*/
@@ -83,27 +83,37 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 
 						if(!strcmp(argv[i], ARG_STDIN))
 
-							flags->stdin = true;
+							flags->stdinn = true;
 						
 						else{
 
 							/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el/los datos restantes son nombres de archivos de entrada
 							por lo que se opta por guardar su posicion, es decir el estado del iterador, en un puntero a int para asi despues poder iterar sobre argv facilemtene */
 
-							nodo_aux = nodo;
+							
+							if(!nodo){
+								if(!(nodo = lista_crear()))
+									return ST_ERROR_LISTA;
+							}
 
-							if(!nodo_aux)
-								return ST_ERROR_LISTA;
+							nodo->dato = (char *)strdup(argv[i]);
+
+							temp = nodo;
+
+							i++;
 
 							for(; i < argc; i++){
+  								if(!(nodo->next = lista_crear()))
+   									return ST_ERROR_LISTA;
 
-								if(!(nodo_aux->next = lista_crear()))
-									return ST_ERROR_LISTA;
+  							nodo->next->dato = (char *)strdup(argv[i]);
 
-								nodo_aux->dato = (char *)argv[i];
+  							nodo = nodo->next;
 
-								nodo_aux = nodo_aux->next;
 							}
+
+							nodo = temp;
+
 						}
 					}
 				}
@@ -114,6 +124,5 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 			count = 0;
 		}
 	}
-
 	return ST_OK;
 }

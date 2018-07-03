@@ -9,6 +9,9 @@ nodo_t *lista_crear(void){
 	if(!(nodo = (nodo_t *)malloc(sizeof(nodo_t))))
 		return NULL;
 
+	nodo->next = NULL;
+	nodo->dato = NULL;
+
 	return nodo;
 }
 
