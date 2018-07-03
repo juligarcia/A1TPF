@@ -79,7 +79,7 @@ bool vector_proc_txt(char *filename, vector_t *v, int *used, bool (*vector_carga
 	FILE *fp;
 	int *dato;
 
-	if(!(fp = fopen(filename, "r")))
+	if(!(fp = fopen(filename, "rt")))
 		return false;
 
 	/*Se lee el archivo linea por linea, se transforman sus datos en numeros, dejando de lado los comentarios*/
@@ -220,6 +220,89 @@ bool vector_proc_stdin(vector_t *v, int *used){
 
 
 
+/*status_t leer_fichero_bin(simpletron_t *simpletron, FILE *pf){
+	
+	int i;
+	
+	simpletron->palabras = (palabra_t *)calloc(simpletron->cant, sizeof(palabra_t));
+
+	for(i = 0; i < simpletron->cant; i++){
+		if(fread(&(simpletron->palabras[i]), sizeof(int), 1,pf) != 1){
+			return ST_ERROR_ARG_LEIDOS;
+		}
+	}
+	
+	if(i < simpletron->cant || i > simpletron->cant){
+		return ST_ERROR_OUT_RANG;
+	}
+	
+	return ST_OK;
+	
+}*/
+
+
+bool vector_proc_bin(char *filename, vector_t *v, int *used, bool (*vector_cargar)(vector_t *v, void *dato, int *used)){
+
+	int i, aux, bin1, bin2;
+	FILE *fp;
+	palabra_t *dato;
+
+	if(!(fp = fopen(filename, "rb")))
+		return false;
+
+	for(i = 0; i < v->size; i++){
+		
+		if(fread(&aux, sizeof(int), 1, fp) != 1)
+			return false;
+
+		if(aux < MIN_SIZE_WORD)
+			aux *= -1;
+
+		if(aux == 0 || aux < 10000){
+		}
+			
+		else{
+			bin1 = aux;
+			bin2 = bin1;
+
+			bin1 /= 10000;
+
+			bin2 -= 10000*bin1;
+
+			bin1 = bin1 << SHIFT_1;
+
+			bin1 = bin1 & MASK_1;
+
+			aux = bin1 | bin2;
+		}
+
+		if(aux > MAX_SIZE_WORD)
+			return false;	
+
+		dato = (palabra_t *)malloc(sizeof(palabra_t));
+		*dato = aux;	
+		
+		if(vector_cargar(v, dato, used) == false)
+			return false;
+	}
+
+	for(i = *used; i < v->size; i++){
+
+		aux = 0;
+
+		dato = (palabra_t *)malloc(sizeof(palabra_t));
+		*dato = aux;	
+		
+		if(vector_cargar(v, dato, used) == false)
+			return false;
+	}
+
+return true;
+}
+
+
+/*Funciones del vector que se usan en el procesamiento del simpletron*/
+
 bool vector_op_leer(vector_t *v, int operand){
 	
 	/*Se lee por stdin y se guarda en una posicion de memoria*/
@@ -244,12 +327,6 @@ bool vector_op_leer(vector_t *v, int operand){
 }
 
 
-bool vector_proc_bin(char *filename, vector_t *v, int *used, bool (*vector_cargar)(vector_t *v, void *dato, int *used)){
-
-return true;
-}
-
-
 void vector_op_guardar(vector_t *v, int operand, palabra_t acc){
 
 	/*Guarda el contenido del acumulador en una posicion de memoria*/
@@ -266,6 +343,3 @@ void vector_op_guardarp(vector_t *v, int operand, palabra_t acc){
 	*(palabra_t *)v->datos[*(palabra_t *)v->datos[operand]] = acc;
 
 }
-
-
-

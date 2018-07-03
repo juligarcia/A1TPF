@@ -4,7 +4,7 @@ int main(int argc, char *argv[]){
 
 	flags_t flags;
 	simpletron_t simpletron;
-	int j = 1, used = 0;
+	int j = 0, used = 0;
 	nodo_t *nodo = (nodo_t *)malloc(sizeof(nodo_t)), *nodo_aux = NULL;
 	FILE *output;
 
@@ -82,6 +82,7 @@ int main(int argc, char *argv[]){
 		nodo_aux = nodo;
 
 		while(nodo_aux){
+			j++;
 			simpletron.acc = 0;
 			used = 0;
 
