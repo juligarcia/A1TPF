@@ -64,7 +64,7 @@ bool simpletron_op_jmz(simpletron_t *simpletron, int *k, int operand);
 
 void simpletron_op_djnz(simpletron_t *simpletron, int *k, int operand);
 
-void simpletron_op_cargarp(simpletron_t *simpletron, int operand);
+bool simpletron_op_cargarp(simpletron_t *simpletron, int operand);
 
 bool simpletron_op_jmpneg(simpletron_t *simpletron, int *k, int operand);
 

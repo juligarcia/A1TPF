@@ -31,4 +31,6 @@ void dump_txt(simpletron_t simpletron, FILE *pf, char *filename);
 
 bool dump_bin(simpletron_t simpletron, FILE *pf, char *filename);
 
+char *strdup_own(const char *str);
+
 #endif

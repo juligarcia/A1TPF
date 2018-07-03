@@ -96,7 +96,7 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 									return ST_ERROR_LISTA;
 							}
 
-							nodo->dato = (char *)strdup(argv[i]);
+							nodo->dato = (char *)strdup_own(argv[i]);
 
 							temp = nodo;
 
@@ -106,7 +106,7 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
   								if(!(nodo->next = lista_crear()))
    									return ST_ERROR_LISTA;
 
-  							nodo->next->dato = (char *)strdup(argv[i]);
+  							nodo->next->dato = (char *)strdup_own(argv[i]);
 
   							nodo = nodo->next;
 

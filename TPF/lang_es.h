@@ -4,6 +4,7 @@
 #define FILE_WELCOME "welcome_es.txt"
 
 /*Mensajes en ESPAÑOL para el seguimiento del procedimiento*/
+
 #define MSJ_COMIENZO_PROC "*** INICIO EJECUCION DEL SIMPLETRON ***"
 #define MSJ_INGRESE_POS "Ingrese la palabra a guardar en la posicion de memoria"
 #define MSJ_POS "En la posicion de memoria"
@@ -20,11 +21,3 @@
 #define MSJ_DUMP_FILE "Dump del procesamiento del archivo"
 
 #define MSJ_ENTRY_FILE "Archivo de entrada"
-#define MSJ_AR_SALIDA "Archivo de salida"
-#define MSJ_CANT_PROC "Cantidad de procesos"
-#define MSJ_NO_IN "No hay archivo de entrada"
-#define MSJ_NO_OUT "No hay archivo de salida"
-#define MSJ_NOM_AR "Nombre de archivo"
-/*Mensajes en ESPAÑOL para las diferentes funciones*/
-/*Mensajes para la funcion grabar_fichero_txt en ESPAÑOL*/
-#define MSJ_AR_GUARDADO "Nombre del archivo guardado"

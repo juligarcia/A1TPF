@@ -126,3 +126,18 @@ bool dump_bin(simpletron_t simpletron, FILE *pf, char *filename){
 
 	return true;
 }
+
+
+/*Implementacion de la funcion strdup pero propia, ya que esta traia problemas al compilar en distintas maquinas*/
+
+char *strdup_own(const char *str){
+
+	int n = strlen(str) + 1;
+
+	char *dup = malloc(n);
+
+	if(dup)
+		strcpy(dup, str);
+
+	return dup;
+}

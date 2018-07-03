@@ -46,7 +46,9 @@ bool proc_simpletron(simpletron_t *simpletron){
 				break;
 
 			case OP_PCARGAR: 
-				simpletron_op_cargarp(simpletron, operand);
+				if(simpletron_op_cargarp(simpletron, operand) == false)
+					return false;
+
 				simpletron->pc = k;
 
 				break;
@@ -200,7 +202,7 @@ bool simpletron_op_jmpneg(simpletron_t *simpletron, int *k, int operand){
 
 	/*Salta a la orden especificada SOLO SI el acumulador es negativo*/
 
-	if(operand > simpletron->memory->size)
+	if(operand > simpletron->memory->size || operand == simpletron->pc)
 			return false;
 
 	if(simpletron->acc < 0){
@@ -217,7 +219,7 @@ bool simpletron_op_jmpzero(simpletron_t *simpletron, int *k, int operand){
 
 	/*Salta a la orden especificada SOLO SI el acumulador es 0*/
 
-	if(operand > simpletron->memory->size)
+	if(operand > simpletron->memory->size || operand == simpletron->pc)
 		return false;
 	
 	if(simpletron->acc == 0){
@@ -234,7 +236,7 @@ bool simpletron_op_jmz(simpletron_t *simpletron, int *k, int operand){
 
 	/*Salta a la orden especificada SOLO SI el acumulador es distinto de 0*/
 
-	if(operand > simpletron->memory->size)
+	if(operand > simpletron->memory->size || operand == simpletron->pc)
 		return false;
 
 	if((simpletron->acc)){
@@ -251,16 +253,21 @@ void simpletron_op_djnz(simpletron_t *simpletron, int *k, int operand){
 
 	/*Decrementa el acumulador por el contenido de la posicion de memoria indicado y, si este no es 0, vuelve al comienzo del ciclo*/
 
-	if((simpletron->acc -= *(palabra_t *)simpletron->memory->datos[operand]) == 0) 
+	if((simpletron->acc -= *(palabra_t *)simpletron->memory->datos[operand]) != 0) 
 		*k = -1;
 
 }
 
 
-void simpletron_op_cargarp(simpletron_t *simpletron, int operand){
+bool simpletron_op_cargarp(simpletron_t *simpletron, int operand){
 
 	/*Es homologa a la funcion cargar, pero se indica una posicion de memoria donde se sacara un puntero*/
 
+	if(*(palabra_t *)simpletron->memory->datos[operand] > simpletron->mem)
+		return false;
+
 	simpletron->acc = *(palabra_t *)simpletron->memory->datos[*(palabra_t *)simpletron->memory->datos[operand]]; 
+
+	return true;
 
 }
