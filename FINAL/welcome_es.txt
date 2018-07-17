@@ -1,0 +1,6 @@
+>Bienvenido a Simpletron!
+>Por favor, ingrese su programa una instrucción a la vez.
+>En caso de ser por archivo de entrada, omitir las intrucciones siguientes.
+>Le escribiré la dirección en memoria y luego imprimiré (?).
+>Una vez visualizado el símbolo, podrá ingresar la palabra para esta ubicación.
+>Ingrese -99999 para finalizar:

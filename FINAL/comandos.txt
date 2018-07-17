@@ -1,0 +1,6 @@
+gcc -ansi -Wall -pedantic -c -o main.o main.c
+gcc -ansi -Wall -pedantic -c -o print.o print.c
+gcc -ansi -Wall -pedantic -c -o argument_proc.o argument_proc.c
+gcc -ansi -Wall -pedantic -c -o lista.o lista.c
+gcc -ansi -Wall -pedantic -c -o vector.o vector.c
+gcc -Wall -o test main.o lista.o vector.o argument_proc.o print.o

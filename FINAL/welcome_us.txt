@@ -1,0 +1,6 @@
+>Welcome to Simpletron!
+>Please, input the program one intruction at a time.
+>In case it is entered via an input file, skip the following instructions.
+>I will write the memory position followed by (?).
+>Once you visualize the simbol, you can enter the order.
+>Enter -99999 to end read:
