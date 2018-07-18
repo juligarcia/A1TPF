@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
 
 	if(argument_proc(argc, argv, &flags, &simpletron, &nodo) != ST_OK){
 		printf("%s\n", MSJ_ERROR_ARG);
-		lista_destruir(&nodo);
+		lista_destruir(nodo);
 		return EXIT_FAILURE;
 	}
 
@@ -31,14 +31,14 @@ int main(int argc, char *argv[]){
 
 	if(flags.help == true){
 		print_txt(FILE_HELP);
-		lista_destruir(&nodo);
+		lista_destruir(nodo);
 		return EXIT_SUCCESS;
 	}
 	
 	/*Se debe crear la estructura para la memoria del Simpletron*/
 
 	if(!(simpletron.memory = vector_crear(simpletron.mem))){
-		lista_destruir(&nodo);
+		lista_destruir(nodo);
 		vector_destruir(&(simpletron.memory));
 		return EXIT_FAILURE;
 	}
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
 
 	if(flags.fotxt == true && flags.fobin  == false){
 		if(!(output = fopen(DUMP_TXT, "w"))){
-			lista_destruir(&nodo);
+			lista_destruir(nodo);
 			vector_destruir(&(simpletron.memory));
 			return EXIT_FAILURE;
 		}
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
 
 	if(flags.fotxt == false && flags.fobin  == true){
 		if(!(output = fopen(DUMP_BIN, "wb"))){
-			lista_destruir(&nodo);
+			lista_destruir(nodo);
 			vector_destruir(&(simpletron.memory));
 			return EXIT_FAILURE;
 		}
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
 	if(flags.stdinn == true){
 
 		if(vector_proc_stdin(simpletron.memory, &used) == false){
-			lista_destruir(&nodo);
+			lista_destruir(nodo);
 			vector_destruir(&(simpletron.memory));
 			if(output)
 				fclose(output);
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]){
 		/*Se inicia el procesamiento del simpletron*/
 
 		if(proc_simpletron(&simpletron) == false){
-			lista_destruir(&nodo);
+			lista_destruir(nodo);
 			vector_destruir(&(simpletron.memory));
 			if(output)
 				fclose(output);
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]){
 
 		if(flags.fotxt == false && flags.fobin == true){
 			if(dump_bin(simpletron, output, MSJ_STDIN) ==false){
-				lista_destruir(&nodo);
+				lista_destruir(nodo);
 				vector_destruir(&(simpletron.memory));
 				if(output)
 					fclose(output);
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]){
 	  	De ser asi, deberia haber un nodo creado en la lista, con al menos un archivo guardado*/
 
 		if(!(nodo->dato)){
-			lista_destruir(&nodo);
+			lista_destruir(nodo);
 			vector_destruir(&(simpletron.memory));
 			if(output)
 				fclose(output);
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]){
 
 				case SPECIFIER_TXT:				
 					if(vector_proc_txt((char *)nodo_aux->dato, simpletron.memory, &used, vector_cargar) == false){
-						lista_destruir(&nodo);
+						lista_destruir(nodo);
 						vector_destruir(&(simpletron.memory));
 						if(output)
 							fclose(output);
@@ -144,7 +144,7 @@ int main(int argc, char *argv[]){
 
 				case SPECIFIER_BIN:				
 					if(vector_proc_bin((char *)nodo_aux->dato, simpletron.memory, &used, vector_cargar) == false){
-						lista_destruir(&nodo);
+						lista_destruir(nodo);
 						vector_destruir(&(simpletron.memory));
 						if(output)
 							fclose(output);
@@ -163,7 +163,7 @@ int main(int argc, char *argv[]){
 			/*Se inicia el procesamiento del simpletron*/
 
 			if(proc_simpletron(&simpletron) == false){
-				lista_destruir(&nodo);
+				lista_destruir(nodo);
 				vector_destruir(&(simpletron.memory));
 				if(output)
 					fclose(output);
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]){
 
 			if(flags.fotxt == false && flags.fobin == true){
 				if(dump_bin(simpletron, output, (char *)nodo_aux->dato) ==false){
-					lista_destruir(&nodo);
+					lista_destruir(nodo);
 					vector_destruir(&(simpletron.memory));
 					if(output)
 						fclose(output);
@@ -187,10 +187,9 @@ int main(int argc, char *argv[]){
 				}
 			}
 
-			vector_limpiar_datos(simpletron.memory);
-
 			if(nodo_aux->next){
 				nodo_aux = nodo_aux->next;
+				vector_limpiar_datos(simpletron.memory);
 			}
 			else{
 				break;
@@ -199,7 +198,7 @@ int main(int argc, char *argv[]){
 	}
 
 	fclose(output);
-	lista_destruir(&nodo);
+	lista_destruir(nodo);
 	vector_destruir(&(simpletron.memory));
 
 	return EXIT_SUCCESS;

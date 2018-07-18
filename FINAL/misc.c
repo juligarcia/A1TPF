@@ -134,7 +134,9 @@ char *strdup_own(const char *str){
 
 	int n = strlen(str) + 1;
 
-	char *dup = malloc(n);
+	char *dup;
+
+	dup = (char *)malloc(sizeof(char)*n);
 
 	if(dup)
 		strcpy(dup, str);

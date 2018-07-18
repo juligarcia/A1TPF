@@ -60,12 +60,11 @@ void vector_limpiar_datos(vector_t *v){
 
 bool vector_cargar(vector_t *v, void *dato, int *used){
 
-	if(v->size >= *used)
+	if(*used >= v->size)
 		return false;
 
-	if(!(v->datos[*used] = (short unsigned int *)malloc(sizeof(short unsigned int)))){
-		return false;
-	}
+	/*if(!(v->datos[*used] = (short unsigned int *)malloc(sizeof(short unsigned int))))		
+		return false;*/
 
 	v->datos[*used] = dato;
 
@@ -77,7 +76,8 @@ bool vector_cargar(vector_t *v, void *dato, int *used){
 
 bool vector_proc_txt(char *filename, vector_t *v, int *used, bool (*vector_cargar)(vector_t *v, void *dato, int *used)){
 
-	int i, aux, bin1, bin2, *dato, aux2;
+	int i, aux, bin1, bin2, aux2;
+	short unsigned int *dato;
 	char buffer[MAX_BUFFER], *buffer2;
 	FILE *fp;
 
@@ -88,7 +88,7 @@ bool vector_proc_txt(char *filename, vector_t *v, int *used, bool (*vector_carga
 
 	while(fgets(buffer, MAX_BUFFER, fp)){
 
-		dato = (int *)malloc(sizeof(short unsigned int));
+		dato = (short unsigned int *)malloc(sizeof(short unsigned int));
 
 		aux2 = strtol(buffer, &buffer2, 10);
 
@@ -101,7 +101,7 @@ bool vector_proc_txt(char *filename, vector_t *v, int *used, bool (*vector_carga
 			aux2 *= -1;
 		}
 
-		if(aux2 == 0 || aux2 < 10000){
+		if(aux2 >= 0 && aux2 < 10000){
 		}
 			
 		else{
@@ -119,7 +119,7 @@ bool vector_proc_txt(char *filename, vector_t *v, int *used, bool (*vector_carga
 			aux = bin1 | bin2;
 		}
 
-		if(aux2 > MAX_SIZE_WORD && aux2 > MIN_SIZE_WORD){
+		if(aux > MAX_SIZE_WORD){
 			free(dato);
 			fclose(fp);
 			return false;
@@ -131,7 +131,7 @@ bool vector_proc_txt(char *filename, vector_t *v, int *used, bool (*vector_carga
 			return false;
 		}
 
-		*dato = (short unsigned int)aux2;
+		*dato = (short unsigned int)aux;
 
 		if(vector_cargar(v, dato, used) == false){
 			fclose(fp);
@@ -146,10 +146,11 @@ bool vector_proc_txt(char *filename, vector_t *v, int *used, bool (*vector_carga
 
 		aux = 0;
 
-		dato = (int *)malloc(sizeof(short unsigned int));
+		dato = (short unsigned int *)malloc(sizeof(short unsigned int));
 		*dato = (short unsigned int)aux;	
 		
 		if(vector_cargar(v, dato, used) == false){
+			free(dato);
 			fclose(fp);
 			return false;
 		}

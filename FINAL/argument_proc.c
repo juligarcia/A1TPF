@@ -94,6 +94,7 @@ status_t argument_proc(int argc, char *argv[], flags_t *flags, simpletron_t *sim
 						/*Dado que paso todas las comparaciones con datos utiles para los argumentos establecidos, se determina que el/los datos restantes son nombres de archivos de entrada
 						por lo que se opta por guardar su posicion, es decir el estado del iterador, en un puntero a int para asi despues poder iterar sobre argv facilemtene */
 						(*nodo)->dato = (char *)strdup_own(argv[i]);
+						(*nodo)->next = NULL;
 						temp = *nodo;
 						i++;
 							
