@@ -27,24 +27,24 @@ char proc_file_name(nodo_t *nodo){
 	/*Si no se encuentra se interpreta como txt*/
 
 	if(!(aux = strchr(nodo->dato, FILE_SPECIFIER)))
-		return SPECIFIER_TXT;
+		return SPECIFIER_DEFAULT;
 
 	/*En caso de ser encontrado, se interpreta lo que se encuentra antes de este caracter, de ser un string de mas de largo mas de 1, se considera parte del nombre del archivo y se interpreta como txt.
 	En caso de tener largo 1 lo que se encuentre antes, se comparara con los especificadores de binario y texto, 'b' y 't', respectivamente, para determinar que tipo de archivo es. En caso de no ser ninguno de estos
 	tambien se considerara parte del nombre del archivo y se dira que es un .txt*/
 
 	if((strlen(nodo->dato) - strlen(aux)) != SPECIFIER_LEN)
-		return SPECIFIER_TXT;
+		return SPECIFIER_DEFAULT;
 
 	/*En caso de que el formato sea "b:namefile" o "t:namefile" se corre el puntero hacia el primer caracter donde empieza el nombre*/
 
 	if(((char*)nodo->dato)[0] == SPECIFIER_BIN){
-		nodo->dato = (char *)nodo->dato + 2;
+		/*nodo->dato = (char *)nodo->dato + 2;*/
 		return SPECIFIER_BIN;
 	}
 
 	if(((char *)nodo->dato)[0] == SPECIFIER_TXT){		
-		nodo->dato = ((char *)(nodo->dato)+ 2);		
+		/*nodo->dato = ((char *)(nodo->dato)+ 2);*/		
 		return SPECIFIER_TXT;
 	}
 
@@ -134,7 +134,7 @@ char *strdup_own(const char *str){
 
 	int n = strlen(str) + 1;
 
-	char *dup;
+	char *dup = NULL;
 
 	dup = (char *)malloc(sizeof(char)*n);
 

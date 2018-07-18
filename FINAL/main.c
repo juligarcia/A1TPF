@@ -132,26 +132,41 @@ int main(int argc, char *argv[]){
 			switch(proc_file_name(nodo_aux)){
 
 				case SPECIFIER_TXT:				
+					if(vector_proc_txt((char *)nodo_aux->dato + 2, simpletron.memory, &used, vector_cargar) == false){
+						lista_destruir(nodo);
+						vector_destruir(&(simpletron.memory));
+						if(output)
+							fclose(output);
+						
+						return EXIT_FAILURE;
+					}
+					printf("%s[%d]: %s\n\n", MSJ_ENTRY_FILE, j, (char *)nodo_aux->dato + 2);
+					break;
+
+				case SPECIFIER_BIN:				
+					if(vector_proc_bin((char *)nodo_aux->dato + 2, simpletron.memory, &used, vector_cargar) == false){
+						lista_destruir(nodo);
+						vector_destruir(&(simpletron.memory));
+						if(output)
+							fclose(output);
+						
+						return EXIT_FAILURE;
+					}
+					printf("%s[%d]: %s\n\n", MSJ_ENTRY_FILE, j, (char *)nodo_aux->dato + 2);
+					break;
+
+				case SPECIFIER_DEFAULT:
 					if(vector_proc_txt((char *)nodo_aux->dato, simpletron.memory, &used, vector_cargar) == false){
 						lista_destruir(nodo);
 						vector_destruir(&(simpletron.memory));
 						if(output)
 							fclose(output);
+						
 						return EXIT_FAILURE;
 					}
 					printf("%s[%d]: %s\n\n", MSJ_ENTRY_FILE, j, (char *)nodo_aux->dato);
 					break;
 
-				case SPECIFIER_BIN:				
-					if(vector_proc_bin((char *)nodo_aux->dato, simpletron.memory, &used, vector_cargar) == false){
-						lista_destruir(nodo);
-						vector_destruir(&(simpletron.memory));
-						if(output)
-							fclose(output);
-						return EXIT_FAILURE;
-					}
-					printf("%s[%d]: %s\n\n", MSJ_ENTRY_FILE, j, (char *)nodo_aux->dato);
-					break;
 
 				default:
 					continue;

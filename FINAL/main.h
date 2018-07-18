@@ -22,8 +22,6 @@
 
 #define NEXT_PROC "------------------------------------------------"
 
-typedef enum {t, b, e}specifier_t;
-
 char proc_file_name(nodo_t *nodo);
 
 #endif

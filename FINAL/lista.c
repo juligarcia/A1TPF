@@ -18,14 +18,12 @@ nodo_t *lista_crear(void){
 void lista_destruir(nodo_t *nodo){
 
 	nodo_t *current = nodo, *aux;
-	void *dato;
 
 	while(current){
 		aux = current;
 		current = current->next;
-		dato = aux->dato;
 		
+		free(aux->dato);
 		free(aux);
-		free(dato);
 	}
 }

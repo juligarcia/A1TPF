@@ -11,8 +11,11 @@
 #define FILE_SPECIFIER ':'
 #define SPECIFIER_LEN 1
 #define SPECIFIER_TXT 't'
+#define SPECIFIER_DEFAULT 'd'
 #define SPECIFIER_BIN 'b'
 #define SPECIFIER_ERROR 'e'
+
+typedef enum {t, b, e, d}specifier_t;
 
 /*Tamaño standar de buffer*/
 
