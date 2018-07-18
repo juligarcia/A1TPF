@@ -38,15 +38,11 @@ char proc_file_name(nodo_t *nodo){
 
 	/*En caso de que el formato sea "b:namefile" o "t:namefile" se corre el puntero hacia el primer caracter donde empieza el nombre*/
 
-	if(((char*)nodo->dato)[0] == SPECIFIER_BIN){
-		/*nodo->dato = (char *)nodo->dato + 2;*/
+	if(((char*)nodo->dato)[0] == SPECIFIER_BIN)		
 		return SPECIFIER_BIN;
-	}
 
-	if(((char *)nodo->dato)[0] == SPECIFIER_TXT){		
-		/*nodo->dato = ((char *)(nodo->dato)+ 2);*/		
+	if(((char *)nodo->dato)[0] == SPECIFIER_TXT)		
 		return SPECIFIER_TXT;
-	}
 
 	return SPECIFIER_ERROR;
 
